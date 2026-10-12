@@ -532,6 +532,22 @@ pub fn ix_set_quote_signer(signer: &Pubkey, participant_wallet: &Pubkey, new_quo
     )
 }
 
+pub fn ix_close_receipt(caller: &Pubkey, quote_receipt: &Pubkey, rent_payer: &Pubkey) -> Instruction {
+    Instruction::new_with_bytes(
+        program_id(),
+        &corridor_program::instruction::CloseReceipt {}.data(),
+        corridor_program::accounts::CloseReceipt {
+            caller: *caller,
+            config: config_pda(),
+            quote_receipt: *quote_receipt,
+            rent_payer: *rent_payer,
+            event_authority: event_authority(),
+            program: program_id(),
+        }
+        .to_account_metas(None),
+    )
+}
+
 /// A deployed, initialised protocol with funded role keys.
 pub struct Env {
     pub svm: LiteSVM,

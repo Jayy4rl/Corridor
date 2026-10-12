@@ -1,4 +1,5 @@
 pub mod accept_admin;
+pub mod close_receipt;
 pub mod initialize_config;
 pub mod propose_admin;
 pub mod register_issuer;
@@ -15,6 +16,7 @@ pub mod update_params;
 pub mod update_participant;
 
 pub use accept_admin::*;
+pub use close_receipt::*;
 pub use initialize_config::*;
 pub use propose_admin::*;
 pub use register_issuer::*;

@@ -137,3 +137,10 @@ pub struct QuoteSettled {
     pub compliance_hash: [u8; 32],
     pub settled_at: i64,
 }
+
+#[event]
+pub struct ReceiptClosed {
+    pub receipt: Pubkey,
+    pub rent_payer: Pubkey,
+    pub closed_by: Pubkey,
+}

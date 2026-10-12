@@ -186,4 +186,9 @@ pub mod corridor_program {
             compliance_hash,
         )
     }
+
+    // 16
+    pub fn close_receipt(ctx: Context<CloseReceipt>) -> Result<()> {
+        instructions::close_receipt::handle_close_receipt(ctx)
+    }
 }
