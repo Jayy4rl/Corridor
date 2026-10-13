@@ -1,3 +1,6 @@
+// LiteSVM's FailedTransactionMetadata is large; the helpers return it as-is.
+#![allow(clippy::result_large_err)]
+
 mod common;
 
 use {
@@ -261,4 +264,62 @@ fn admin_handlers_still_work_while_paused() {
     send(&mut env.svm, &[ix_set_paused(&env.guardian.pubkey(), true)], &[&env.guardian]).unwrap();
     send(&mut env.svm, &[ix_update_params(&env.admin.pubkey(), Some(0), None, None)], &[&env.admin]).unwrap();
     assert_eq!(fetch_config(&env.svm).fee_bps, 0);
+}
+
+// Default-pubkey guard: nobody holds the all-zero key's private key, so
+// setting it would lock a role (or the treasury) out permanently.
+
+#[test]
+fn initialize_config_rejects_default_keys() {
+    for field in 0..5 {
+        let deployer = Keypair::new();
+        let mut svm = new_svm(Some(deployer.pubkey()));
+        svm.airdrop(&deployer.pubkey(), 10_000_000_000).unwrap();
+        let mut args = default_config_args(&deployer, &deployer, &deployer);
+        match field {
+            0 => args.admin = Pubkey::default(),
+            1 => args.compliance_authority = Pubkey::default(),
+            2 => args.guardian = Pubkey::default(),
+            3 => args.usdc_mint = Pubkey::default(),
+            _ => args.treasury_owner = Pubkey::default(),
+        }
+
+        let res = send(&mut svm, &[ix_initialize_config(&deployer.pubkey(), args)], &[&deployer]);
+        assert_err(res, CorridorError::DefaultPubkey);
+    }
+}
+
+#[test]
+fn update_params_rejects_default_treasury() {
+    let mut env = Env::new();
+    let res = send(
+        &mut env.svm,
+        &[ix_update_params(&env.admin.pubkey(), None, Some(Pubkey::default()), None)],
+        &[&env.admin],
+    );
+    assert_err(res, CorridorError::DefaultPubkey);
+}
+
+#[test]
+fn set_operational_authorities_rejects_default_keys() {
+    for (compliance, guardian) in [(Some(Pubkey::default()), None), (None, Some(Pubkey::default()))] {
+        let mut env = Env::new();
+        let res = send(
+            &mut env.svm,
+            &[ix_set_operational_authorities(&env.admin.pubkey(), compliance, guardian)],
+            &[&env.admin],
+        );
+        assert_err(res, CorridorError::DefaultPubkey);
+    }
+}
+
+#[test]
+fn propose_admin_rejects_default_key() {
+    let mut env = Env::new();
+    let res = send(
+        &mut env.svm,
+        &[ix_propose_admin(&env.admin.pubkey(), Some(Pubkey::default()))],
+        &[&env.admin],
+    );
+    assert_err(res, CorridorError::DefaultPubkey);
 }

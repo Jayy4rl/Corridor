@@ -1,3 +1,6 @@
+// LiteSVM's FailedTransactionMetadata is large; the helpers return it as-is.
+#![allow(clippy::result_large_err)]
+
 mod common;
 
 use {
@@ -729,4 +732,75 @@ fn settle_needs_v0_transaction_with_lookup_table() {
     let v0_size = SIGNATURES + solana_message::VersionedMessage::V0(v0).serialize().len();
     println!("settle_quote: legacy {legacy} bytes, v0 with lookup table {v0_size} bytes (limit {PACKET_DATA_SIZE})");
     assert!(v0_size <= PACKET_DATA_SIZE, "v0 transaction is {v0_size} bytes");
+}
+
+// ---- Attack classes covered by constraints, pinned explicitly ----
+
+/// A fake instructions sysvar would let an attacker feed the signature check
+/// any "previous instruction" they like (the Wormhole exploit class). The
+/// address constraint must reject it before the handler runs.
+#[test]
+fn spoofed_instructions_sysvar_is_rejected() {
+    let mut m = Market::new();
+    let q = m.quote(Direction::LocalToUsdc);
+    let mut accounts = m.default_accounts(&q);
+    accounts.instructions_sysvar = config_pda();
+    let ixs = [m.signature_ix(&q), m.settle_ix(&q, accounts)];
+
+    let res = m.send_as_taker(&ixs);
+    let code = anchor_lang::error::ErrorCode::ConstraintAddress as u32;
+    assert_eq!(
+        res.unwrap_err().err,
+        solana_transaction_error::TransactionError::InstructionError(
+            1,
+            solana_transaction::InstructionError::Custom(code)
+        )
+    );
+}
+
+/// The indexer treats QuoteSettled as the system of record (F4), so a
+/// top-level call shaped like an emit_cpi! event must fail: only the program
+/// itself can sign as the event authority.
+#[test]
+fn quote_settled_events_cannot_be_forged() {
+    use anchor_lang::{event::EVENT_IX_TAG_LE, AnchorSerialize, Discriminator};
+    let mut m = Market::new();
+    let fake = QuoteSettled {
+        quote_id: 1,
+        maker: m.maker.pubkey(),
+        taker: m.taker.pubkey(),
+        recipient: m.payout.pubkey(),
+        mint_in: m.local_mint,
+        mint_out: m.usdc_mint,
+        amount_in: 1,
+        amount_out: u64::MAX,
+        fee: 0,
+        compliance_hash: [0; 32],
+        settled_at: now(&m.env.svm),
+    };
+    let mut data = [EVENT_IX_TAG_LE, QuoteSettled::DISCRIMINATOR].concat();
+    fake.serialize(&mut data).unwrap();
+    let forged = Instruction {
+        program_id: program_id(),
+        accounts: vec![anchor_lang::solana_program::instruction::AccountMeta::new_readonly(event_authority(), false)],
+        data,
+    };
+
+    assert!(m.send_as_taker(&[forged]).is_err());
+}
+
+#[test]
+fn zero_amount_on_either_leg_is_rejected() {
+    for zero_in in [true, false] {
+        let mut m = Market::new();
+        let mut q = m.quote(Direction::LocalToUsdc);
+        if zero_in {
+            q.amount_in = 0;
+        } else {
+            q.amount_out = 0;
+            q.min_amount_out = 0;
+        }
+
+        expect_settle_err(&mut m, &q, CorridorError::ZeroAmount);
+    }
 }

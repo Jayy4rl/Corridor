@@ -32,7 +32,18 @@ pub fn verify_quote_signature(
         CorridorError::MissingEd25519Instruction
     );
 
-    let data = ix.data.as_slice();
+    let (pubkey, message) = parse_single_signature(&ix.data)?;
+    require!(
+        pubkey == expected_signer.as_ref() && message == expected_message,
+        CorridorError::InvalidQuoteSignature
+    );
+    Ok(())
+}
+
+/// Returns the (pubkey, message) an Ed25519 instruction verified, if it holds
+/// exactly one signature whose offsets all point into its own data. Pure, so
+/// it can be fuzzed: any input must yield Ok or InvalidEd25519Offsets.
+pub fn parse_single_signature(data: &[u8]) -> Result<(&[u8], &[u8])> {
     require!(
         data.len() >= HEADER_LEN + OFFSETS_LEN && data[0] == 1,
         CorridorError::InvalidEd25519Offsets
@@ -58,9 +69,5 @@ pub fn verify_quote_signature(
     let message = data
         .get(message_offset..message_offset + message_len)
         .ok_or(CorridorError::InvalidEd25519Offsets)?;
-    require!(
-        pubkey == expected_signer.as_ref() && message == expected_message,
-        CorridorError::InvalidQuoteSignature
-    );
-    Ok(())
+    Ok((pubkey, message))
 }

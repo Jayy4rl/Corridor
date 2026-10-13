@@ -1,6 +1,9 @@
 use anchor_lang::prelude::*;
 
-use crate::{constants::*, error::CorridorError, events::ParamsUpdated, state::Config};
+use crate::{
+    auth::require_not_default, constants::*, error::CorridorError, events::ParamsUpdated,
+    state::Config,
+};
 
 #[event_cpi]
 #[derive(Accounts)]
@@ -30,6 +33,7 @@ pub fn handle_update_params(
         config.fee_bps = fee_bps;
     }
     if let Some(treasury_owner) = treasury_owner {
+        require_not_default(&treasury_owner)?;
         config.treasury_owner = treasury_owner;
     }
     if let Some(retention) = receipt_retention_secs {

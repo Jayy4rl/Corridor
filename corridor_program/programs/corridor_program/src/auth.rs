@@ -17,3 +17,10 @@ pub fn require_authority_or_guardian_stop(
     }
     Ok(())
 }
+
+/// Rejects Pubkey::default() wherever a key grants a role or receives funds:
+/// nobody holds its private key, so setting it locks the role out for good.
+pub fn require_not_default(key: &Pubkey) -> Result<()> {
+    require_keys_neq!(*key, Pubkey::default(), CorridorError::DefaultPubkey);
+    Ok(())
+}

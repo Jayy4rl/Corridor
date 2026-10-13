@@ -8,7 +8,7 @@ use crate::{
     ed25519::verify_quote_signature,
     error::CorridorError,
     events::QuoteSettled,
-    quote::{quote_message, Direction},
+    quote::{quote_message, split_fee, Direction},
     state::{Config, IssuerEntry, Participant, QuoteReceipt, Role, Status},
 };
 
@@ -122,6 +122,8 @@ pub fn handle_settle_quote(
 
     // ---- Checks ----
 
+    require!(amount_in > 0 && amount_out > 0, CorridorError::ZeroAmount);
+
     // C11
     if recipient != taker {
         let partner = &accounts.recipient_participant;
@@ -189,12 +191,8 @@ pub fn handle_settle_quote(
         &message,
     )?;
 
-    // C17: fee ≤ amount_out because fee_bps ≤ 10_000, so the subtraction is safe.
-    let fee = u64::try_from(
-        u128::from(amount_out) * u128::from(accounts.config.fee_bps) / u128::from(BPS_DENOMINATOR),
-    )
-    .map_err(|_| CorridorError::MathOverflow)?;
-    let net_amount_out = amount_out - fee;
+    // C17
+    let (net_amount_out, fee) = split_fee(amount_out, accounts.config.fee_bps)?;
     require!(net_amount_out >= min_amount_out, CorridorError::SlippageExceeded);
 
     // C18

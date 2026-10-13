@@ -1,3 +1,6 @@
+// LiteSVM's FailedTransactionMetadata is large; the helpers return it as-is.
+#![allow(clippy::result_large_err)]
+
 mod common;
 
 use {

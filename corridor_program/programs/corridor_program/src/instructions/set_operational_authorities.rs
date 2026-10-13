@@ -1,7 +1,8 @@
 use anchor_lang::prelude::*;
 
 use crate::{
-    constants::*, error::CorridorError, events::OperationalAuthoritiesUpdated, state::Config,
+    auth::require_not_default, constants::*, error::CorridorError,
+    events::OperationalAuthoritiesUpdated, state::Config,
 };
 
 #[event_cpi]
@@ -26,9 +27,11 @@ pub fn handle_set_operational_authorities(
     let (old_compliance_authority, old_guardian) = (config.compliance_authority, config.guardian);
 
     if let Some(compliance_authority) = compliance_authority {
+        require_not_default(&compliance_authority)?;
         config.compliance_authority = compliance_authority;
     }
     if let Some(guardian) = guardian {
+        require_not_default(&guardian)?;
         config.guardian = guardian;
     }
 

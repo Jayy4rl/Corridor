@@ -62,4 +62,9 @@ pub enum CorridorError {
     SameSigner,
     #[msg("Limits are invalid for this role")]
     InvalidLimits,
+    // Appended after the v2 list so existing error codes keep their numbers.
+    #[msg("Key must not be the default (all-zero) pubkey")]
+    DefaultPubkey,
+    #[msg("Trade amounts must be non-zero")]
+    ZeroAmount,
 }

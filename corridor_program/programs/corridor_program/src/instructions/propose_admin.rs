@@ -1,6 +1,9 @@
 use anchor_lang::prelude::*;
 
-use crate::{constants::*, error::CorridorError, events::AdminProposed, state::Config};
+use crate::{
+    auth::require_not_default, constants::*, error::CorridorError, events::AdminProposed,
+    state::Config,
+};
 
 #[event_cpi]
 #[derive(Accounts)]
@@ -18,6 +21,9 @@ pub struct ProposeAdmin<'info> {
 /// Step 1 of the two-step admin transfer (F1, F6). Passing None cancels a
 /// pending proposal; a new proposal replaces the old one.
 pub fn handle_propose_admin(ctx: Context<ProposeAdmin>, new_admin: Option<Pubkey>) -> Result<()> {
+    if let Some(new_admin) = &new_admin {
+        require_not_default(new_admin)?;
+    }
     ctx.accounts.config.pending_admin = new_admin;
 
     emit_cpi!(AdminProposed {

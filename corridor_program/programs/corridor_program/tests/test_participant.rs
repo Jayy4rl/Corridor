@@ -1,3 +1,6 @@
+// LiteSVM's FailedTransactionMetadata is large; the helpers return it as-is.
+#![allow(clippy::result_large_err)]
+
 mod common;
 
 use {
@@ -355,4 +358,40 @@ fn quote_key_cannot_rotate_itself() {
         &[&quote_key],
     );
     assert_err(res, CorridorError::Unauthorized);
+}
+
+// Default-pubkey guard
+
+#[test]
+fn register_rejects_default_wallet() {
+    let mut env = Env::new();
+    let res = register(&mut env, &Pubkey::default(), Role::Taker, MAX_TRADE_USDC, DAILY_LIMIT_USDC, None);
+    assert_err(res, CorridorError::DefaultPubkey);
+}
+
+#[test]
+fn register_rejects_default_maker_quote_signer() {
+    let mut env = Env::new();
+    let res = register(
+        &mut env,
+        &Pubkey::new_unique(),
+        Role::Maker,
+        MAX_TRADE_USDC,
+        DAILY_LIMIT_USDC,
+        Some(Pubkey::default()),
+    );
+    assert_err(res, CorridorError::DefaultPubkey);
+}
+
+#[test]
+fn quote_signer_cannot_be_rotated_to_default_key() {
+    let mut env = Env::new();
+    let maker = env.participant(Role::Maker);
+
+    let res = send(
+        &mut env.svm,
+        &[ix_set_quote_signer(&maker.pubkey(), &maker.pubkey(), Pubkey::default())],
+        &[&maker],
+    );
+    assert_err(res, CorridorError::DefaultPubkey);
 }

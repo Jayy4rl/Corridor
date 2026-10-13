@@ -47,3 +47,14 @@ pub fn quote_message(
     message.extend_from_slice(&expires_at.to_le_bytes());
     message
 }
+
+/// C17: splits `amount_out` into (net to recipient, fee to treasury). The fee
+/// rounds down, so it never exceeds amount_out and net + fee == amount_out.
+pub fn split_fee(amount_out: u64, fee_bps: u16) -> Result<(u64, u64)> {
+    let fee = u128::from(amount_out) * u128::from(fee_bps) / u128::from(crate::BPS_DENOMINATOR);
+    let fee = u64::try_from(fee).map_err(|_| crate::error::CorridorError::MathOverflow)?;
+    let net = amount_out
+        .checked_sub(fee)
+        .ok_or(crate::error::CorridorError::MathOverflow)?;
+    Ok((net, fee))
+}

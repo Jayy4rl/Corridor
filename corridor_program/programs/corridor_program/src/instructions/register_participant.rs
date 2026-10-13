@@ -1,6 +1,7 @@
 use anchor_lang::prelude::*;
 
 use crate::{
+    auth::require_not_default,
     constants::*,
     error::CorridorError,
     events::ParticipantRegistered,
@@ -41,8 +42,13 @@ pub fn handle_register_participant(
     daily_limit_usdc: u64,
     quote_signer: Option<Pubkey>,
 ) -> Result<()> {
+    require_not_default(&wallet)?;
     let quote_signer = match role {
-        Role::Maker => quote_signer.unwrap_or(wallet),
+        Role::Maker => {
+            let quote_signer = quote_signer.unwrap_or(wallet);
+            require_not_default(&quote_signer)?;
+            quote_signer
+        }
         _ => {
             require!(quote_signer.is_none(), CorridorError::WrongRole);
             Pubkey::default()

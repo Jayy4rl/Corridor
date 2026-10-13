@@ -33,6 +33,7 @@ solana-transaction = "3.0.2"
 solana-signer = "3.0.0"
 solana-keypair = "3.0.1"
 solana-transaction-error = "3.0.0"
+proptest = "1.12"
 
 
 [lints.rust]

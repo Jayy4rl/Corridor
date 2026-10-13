@@ -1,7 +1,10 @@
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::bpf_loader_upgradeable;
 
-use crate::{constants::*, error::CorridorError, events::ConfigInitialized, state::Config};
+use crate::{
+    auth::require_not_default, constants::*, error::CorridorError, events::ConfigInitialized,
+    state::Config,
+};
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct InitializeConfigArgs {
@@ -46,6 +49,15 @@ pub fn handle_initialize_config(
     args: InitializeConfigArgs,
 ) -> Result<()> {
     require!(args.fee_bps <= MAX_FEE_BPS, CorridorError::FeeTooHigh);
+    for key in [
+        &args.admin,
+        &args.compliance_authority,
+        &args.guardian,
+        &args.usdc_mint,
+        &args.treasury_owner,
+    ] {
+        require_not_default(key)?;
+    }
 
     ctx.accounts.config.set_inner(Config {
         admin: args.admin,
