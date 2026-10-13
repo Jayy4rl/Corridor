@@ -31,8 +31,6 @@ pub struct InitializeConfig<'info> {
         bump
     )]
     pub config: Account<'info, Config>,
-    /// C1: the loader-derived ProgramData of *this* program, so only the
-    /// upgrade authority can initialise (prevents front-running).
     #[account(
         seeds = [crate::ID.as_ref()],
         bump,

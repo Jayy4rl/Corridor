@@ -21,8 +21,6 @@ pub struct UpdateIssuerCaps<'info> {
     pub issuer_entry: Account<'info, IssuerEntry>,
 }
 
-/// Split out of set_issuer_status (F2) so a status flip never changes caps.
-/// Today's day_volume is kept, matching update_participant.
 pub fn handle_update_issuer_caps(
     ctx: Context<UpdateIssuerCaps>,
     max_trade_amount: Option<u64>,

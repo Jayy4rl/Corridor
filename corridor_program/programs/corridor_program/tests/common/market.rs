@@ -1,7 +1,3 @@
-//! A ready-to-trade venue for settle_quote tests: USDC (classic SPL) and a
-//! local stablecoin (Token-2022) registered, a taker, a maker quoting with a
-//! dedicated hot key, a payout partner, funded token accounts, and the maker's
-//! SPL approvals to its own delegate PDA.
 
 use {
     super::*,
@@ -22,10 +18,8 @@ use {
 };
 
 pub const USDC_DECIMALS: u8 = 6;
-/// Deliberately different from USDC so a decimals mix-up fails transfer_checked.
 pub const LOCAL_DECIMALS: u8 = 2;
 pub const STARTING_BALANCE: u64 = 1_000_000_000_000_000;
-/// The default trade: 18,000.00 ZAR for 1,000 USDC.
 pub const LOCAL_AMOUNT: u64 = 1_800_000;
 pub const USDC_AMOUNT: u64 = 1_000_000_000;
 pub const COMPLIANCE_HASH: [u8; 32] = [3u8; 32];
@@ -50,9 +44,6 @@ pub fn token_account_state(svm: &LiteSVM, address: &Pubkey) -> spl_token_2022::s
         .base
 }
 
-/// Builds an Ed25519 precompile instruction the way a well-behaved client
-/// does: one signature, all offsets pointing into this instruction's own data
-/// (instruction index u16::MAX). Layout: header | pubkey | signature | message.
 pub fn ed25519_ix(signer: &Keypair, message: &[u8]) -> Instruction {
     const PUBKEY_OFFSET: u16 = 16;
     const SIGNATURE_OFFSET: u16 = PUBKEY_OFFSET + 32;
@@ -169,7 +160,6 @@ impl Market {
         if *mint == self.usdc_mint { USDC_DECIMALS } else { LOCAL_DECIMALS }
     }
 
-    /// Creates (and remembers) a token account for `owner` on `mint`.
     pub fn open_account(&mut self, owner: &Pubkey, mint: &Pubkey) -> Pubkey {
         let account = Keypair::new();
         let token_program = self.token_program(mint);
@@ -229,7 +219,6 @@ impl Market {
 
     // Quotes
 
-    /// (mint_in, mint_out) for a direction: in is what the taker pays.
     pub fn mints(&self, direction: Direction) -> (Pubkey, Pubkey) {
         match direction {
             Direction::LocalToUsdc => (self.local_mint, self.usdc_mint),
@@ -237,8 +226,6 @@ impl Market {
         }
     }
 
-    /// A fresh default quote expiring in QUOTE_TTL seconds, with
-    /// min_amount_out set to exactly what the current fee leaves.
     pub fn quote(&mut self, direction: Direction) -> Quote {
         let (amount_in, amount_out) = match direction {
             Direction::LocalToUsdc => (LOCAL_AMOUNT, USDC_AMOUNT),
@@ -276,13 +263,10 @@ impl Market {
         )
     }
 
-    /// The default quote signature: the market maker's quote key over a
-    /// message naming the market maker and taker.
     pub fn signature_ix(&self, quote: &Quote) -> Instruction {
         ed25519_ix(&self.quote_key, &self.message(quote, &self.maker.pubkey(), &self.taker.pubkey()))
     }
 
-    /// Accounts for a correct settlement; tests mutate fields to attack it.
     pub fn settle_accounts(
         &self,
         quote: &Quote,
@@ -338,20 +322,17 @@ impl Market {
         )
     }
 
-    /// Sends `ixs` signed (and paid) by the market taker.
     pub fn send_as_taker(&mut self, ixs: &[Instruction]) -> TransactionResult {
         let taker = self.taker.insecure_clone();
         send(&mut self.env.svm, ixs, &[&taker])
     }
 
-    /// The happy path: signature + settlement, delivered to the payout partner.
     pub fn settle(&mut self, quote: &Quote) -> TransactionResult {
         let ixs = [self.signature_ix(quote), self.settle_ix(quote, self.default_accounts(quote))];
         self.send_as_taker(&ixs)
     }
 
-    /// Runs `settle` and asserts a specific error at the settle instruction
-    /// (index 1, after the Ed25519 instruction).
+    
     pub fn assert_settle_err(&mut self, ixs: &[Instruction], expected: CorridorError) {
         let res = self.send_as_taker(ixs);
         assert_err_at(res, ixs.len() as u8 - 1, expected);

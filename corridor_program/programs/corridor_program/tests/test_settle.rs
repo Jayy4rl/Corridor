@@ -22,7 +22,6 @@ use {
 
 // ---- Helpers ----
 
-/// A second maker with its own quote key, funded inventory and approvals.
 fn add_maker(m: &mut Market) -> (Keypair, Keypair) {
     let maker = m.env.participant(Role::Maker);
     let quote_key = Keypair::new();
@@ -40,7 +39,6 @@ fn add_maker(m: &mut Market) -> (Keypair, Keypair) {
     (maker, quote_key)
 }
 
-/// A second taker with funded token accounts.
 fn add_taker(m: &mut Market) -> Keypair {
     let taker = m.env.participant(Role::Taker);
     for mint in [m.usdc_mint, m.local_mint] {
@@ -68,7 +66,6 @@ fn guardian_send(m: &mut Market, build: impl FnOnce(&Market) -> Instruction) {
     send(&mut m.env.svm, &[ix], &[&guardian]).unwrap();
 }
 
-/// Settles with the default signature and the given (possibly hostile) accounts.
 fn settle_with_accounts(m: &mut Market, q: &Quote, accounts: corridor_program::accounts::SettleQuote, expected: CorridorError) {
     let ixs = [m.signature_ix(q), m.settle_ix(q, accounts)];
     m.assert_settle_err(&ixs, expected);
@@ -188,8 +185,6 @@ fn settlement_writes_receipt_event_and_counters() {
 
 // ---- Layer 2: account binding (C7-C13, F9) ----
 
-/// F9: maker A's quote must never be paid from maker B's inventory, even
-/// though B has an open allowance to the program.
 #[test]
 fn f9_taker_cannot_drain_another_makers_inventory() {
     let mut m = Market::new();
@@ -204,8 +199,6 @@ fn f9_taker_cannot_drain_another_makers_inventory() {
     assert_eq!(m.balance(&maker_b.pubkey(), &m.usdc_mint.clone()), victim_before);
 }
 
-/// F9, second half: swapping in maker B's Participant and delegate as well
-/// fails, because maker A's quote is not signed by B's quote key.
 #[test]
 fn f9_quote_cannot_be_rebound_to_another_maker() {
     let mut m = Market::new();
@@ -216,7 +209,6 @@ fn f9_quote_cannot_be_rebound_to_another_maker() {
     settle_with_accounts(&mut m, &q, accounts, CorridorError::InvalidQuoteSignature);
 }
 
-/// The v1 design's shared ["delegate"] PDA is no longer an accepted delegate.
 #[test]
 fn approval_to_shared_v1_delegate_is_not_spendable() {
     let mut m = Market::new();
@@ -391,8 +383,6 @@ fn fee_rounds_down() {
     assert_eq!(m.balance(&m.payout.pubkey(), &m.usdc_mint.clone()), 999);
 }
 
-/// F10c: an admin fee rise between quote and settlement cannot silently
-/// short the taker.
 #[test]
 fn fee_rise_after_quote_trips_min_amount_out() {
     let mut m = Market::new();
@@ -467,8 +457,7 @@ fn local_issuer_daily_cap_is_enforced_in_its_own_units() {
     expect_settle_err(&mut m, &q2, CorridorError::DailyLimitExceeded);
 }
 
-/// F12: the USDC IssuerEntry is never written, so settlements across all
-/// pairs do not serialise on it.
+
 #[test]
 fn usdc_issuer_is_read_only_and_untouched() {
     let mut m = Market::new();
@@ -541,7 +530,6 @@ fn quote_for_another_taker_cannot_be_used() {
     assert_err_at(res, 1, CorridorError::InvalidQuoteSignature);
 }
 
-/// F10b: a quote signed for another cluster (different genesis hash) fails.
 #[test]
 fn quote_from_another_cluster_fails() {
     let mut m = Market::new();
@@ -580,8 +568,6 @@ fn rotation_kills_outstanding_quotes() {
     m.assert_settle_err(&ixs, CorridorError::InvalidQuoteSignature);
 }
 
-/// F10a: offsets that point verification at another instruction's data are
-/// rejected, even though the precompile itself accepts them.
 #[test]
 fn offsets_pointing_outside_the_ed25519_instruction_fail() {
     let mut m = Market::new();
@@ -694,10 +680,6 @@ fn quote_ids_are_scoped_per_maker() {
 
 // ---- Transaction size (spec gap #3) ----
 
-/// A legacy transaction does not fit Solana's 1232-byte packet limit, so the
-/// transaction builder must send v0 with an address lookup table holding the
-/// accounts that are the same for every settlement. LiteSVM does not enforce
-/// the packet limit, which is why this is measured rather than sent.
 #[test]
 fn settle_needs_v0_transaction_with_lookup_table() {
     const PACKET_DATA_SIZE: usize = 1232;
@@ -736,9 +718,6 @@ fn settle_needs_v0_transaction_with_lookup_table() {
 
 // ---- Attack classes covered by constraints, pinned explicitly ----
 
-/// A fake instructions sysvar would let an attacker feed the signature check
-/// any "previous instruction" they like (the Wormhole exploit class). The
-/// address constraint must reject it before the handler runs.
 #[test]
 fn spoofed_instructions_sysvar_is_rejected() {
     let mut m = Market::new();
@@ -758,9 +737,6 @@ fn spoofed_instructions_sysvar_is_rejected() {
     );
 }
 
-/// The indexer treats QuoteSettled as the system of record (F4), so a
-/// top-level call shaped like an emit_cpi! event must fail: only the program
-/// itself can sign as the event authority.
 #[test]
 fn quote_settled_events_cannot_be_forged() {
     use anchor_lang::{event::EVENT_IX_TAG_LE, AnchorSerialize, Discriminator};

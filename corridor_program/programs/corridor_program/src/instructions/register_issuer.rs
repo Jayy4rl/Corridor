@@ -14,11 +14,6 @@ use crate::{
     state::{Config, IssuerEntry, Status},
 };
 
-/// C5: Token-2022 extensions v1 refuses. Transfer fees break the exact-amount
-/// legs, transfer hooks add accounts and arbitrary code to every transfer, and
-/// a permanent delegate can move maker or recipient balances at will. A mint
-/// close authority is refused too: a closed mint can be re-created at the same
-/// address with any of the others, after this check has already passed.
 pub const UNSUPPORTED_MINT_EXTENSIONS: [ExtensionType; 4] = [
     ExtensionType::TransferFeeConfig,
     ExtensionType::TransferHook,
@@ -37,7 +32,6 @@ pub struct RegisterIssuer<'info> {
         has_one = admin @ CorridorError::Unauthorized
     )]
     pub config: Account<'info, Config>,
-    /// InterfaceAccount enforces the mint is owned by SPL Token or Token-2022.
     pub mint: InterfaceAccount<'info, Mint>,
     #[account(
         init,

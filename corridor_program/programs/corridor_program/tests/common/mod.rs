@@ -36,14 +36,12 @@ use {
 pub const DEFAULT_FEE_BPS: u16 = 10;
 pub const DEFAULT_RETENTION_SECS: u64 = 3_600;
 pub const GENESIS_HASH: [u8; 32] = [7u8; 32];
-/// 2026-09-21T00:00:00Z; tests run at a realistic wall-clock time.
 pub const START_TIME: i64 = 1_790_000_000;
 pub const ATTESTATION_HASH: [u8; 32] = [1u8; 32];
 pub const ATTESTATION_TTL: i64 = 30 * 86_400;
 pub const MAX_TRADE_AMOUNT: u64 = 1_000_000_000_000;
 pub const DAILY_CAP: u64 = 10_000_000_000_000;
 pub const KYB_HASH: [u8; 32] = [2u8; 32];
-/// USDC has 6 decimals: 100k and 1m USDC.
 pub const MAX_TRADE_USDC: u64 = 100_000_000_000;
 pub const DAILY_LIMIT_USDC: u64 = 1_000_000_000_000;
 
@@ -63,9 +61,6 @@ pub fn program_data_address() -> Pubkey {
     Pubkey::find_program_address(&[program_id().as_ref()], &bpf_loader_upgradeable::ID).0
 }
 
-/// Deploys the program and sets its upgrade authority. LiteSVM's add_program
-/// creates ProgramData with no authority, so the metadata is patched in place.
-/// Bincode layout: u32 variant (3) | u64 slot | u8 Option tag | [u8; 32] key.
 pub fn new_svm(upgrade_authority: Option<Pubkey>) -> LiteSVM {
     let mut svm = LiteSVM::new();
     let bytes = include_bytes!(concat!(
@@ -103,8 +98,6 @@ pub fn funded(svm: &mut LiteSVM) -> Keypair {
     keypair
 }
 
-/// Signs with every signer; the first one pays. The blockhash is expired after
-/// each send so identical instructions can be resubmitted in one test.
 pub fn send(svm: &mut LiteSVM, ixs: &[Instruction], signers: &[&Keypair]) -> TransactionResult {
     let blockhash = svm.latest_blockhash();
     let msg = Message::new_with_blockhash(ixs, Some(&signers[0].pubkey()), &blockhash);
@@ -118,7 +111,6 @@ pub fn assert_err(res: TransactionResult, expected: CorridorError) {
     assert_err_at(res, 0, expected);
 }
 
-/// Asserts that instruction `index` of the transaction failed with `expected`.
 pub fn assert_err_at(res: TransactionResult, index: u8, expected: CorridorError) {
     let code = ERROR_CODE_OFFSET + expected as u32;
     match res {
@@ -141,8 +133,6 @@ pub fn fetch_config(svm: &LiteSVM) -> Config {
     fetch(svm, &config_pda())
 }
 
-/// Finds the first emit_cpi! event of type E in a successful transaction.
-/// Self-CPI event data is EVENT_IX_TAG_LE | event discriminator | borsh body.
 pub fn find_event<E: AnchorDeserialize + Discriminator>(meta: &TransactionMetadata) -> Option<E> {
     let prefix: Vec<u8> = [EVENT_IX_TAG_LE, E::DISCRIMINATOR].concat();
     meta.inner_instructions
@@ -153,7 +143,6 @@ pub fn find_event<E: AnchorDeserialize + Discriminator>(meta: &TransactionMetada
         .map(|data| E::try_from_slice(&data[prefix.len()..]).unwrap())
 }
 
-// Mints
 
 #[derive(Clone, Copy, Debug)]
 pub enum MintExtension {
@@ -164,8 +153,6 @@ pub enum MintExtension {
     MetadataPointer,
 }
 
-/// Creates a mint through the real token program: classic SPL Token when
-/// `token_program` is spl_token's ID, otherwise Token-2022 with `extensions`.
 pub fn create_mint(
     svm: &mut LiteSVM,
     payer: &Keypair,
@@ -516,8 +503,6 @@ pub fn ix_set_participant_status(authority: &Pubkey, wallet: &Pubkey, status: St
     )
 }
 
-/// `participant_wallet` picks the Participant account; `signer` signs. They
-/// differ only in tests that try to rotate someone else's key.
 pub fn ix_set_quote_signer(signer: &Pubkey, participant_wallet: &Pubkey, new_quote_signer: Pubkey) -> Instruction {
     Instruction::new_with_bytes(
         program_id(),
@@ -548,14 +533,12 @@ pub fn ix_close_receipt(caller: &Pubkey, quote_receipt: &Pubkey, rent_payer: &Pu
     )
 }
 
-/// A deployed, initialised protocol with funded role keys.
 pub struct Env {
     pub svm: LiteSVM,
     pub deployer: Keypair,
     pub admin: Keypair,
     pub compliance: Keypair,
     pub guardian: Keypair,
-    /// A real classic-SPL mint with 6 decimals; config.usdc_mint points here.
     pub usdc_mint: Pubkey,
     pub treasury: Pubkey,
 }
@@ -586,8 +569,6 @@ impl Env {
         Self { svm, deployer, admin, compliance, guardian, usdc_mint, treasury }
     }
 
-    /// Funds a new wallet and registers it with default limits (zero for
-    /// payout partners). Makers get the wallet as their quote signer.
     pub fn participant(&mut self, role: Role) -> Keypair {
         let wallet = funded(&mut self.svm);
         let (max_trade, daily_limit) = match role {
@@ -603,7 +584,6 @@ impl Env {
         wallet
     }
 
-    /// Creates a mint and registers it with default caps and a 30-day attestation.
     pub fn registered_mint(&mut self, token_program: &Pubkey) -> Pubkey {
         let mint = create_mint(&mut self.svm, &self.admin, token_program, &[], 6);
         let expires_at = now(&self.svm) + ATTESTATION_TTL;

@@ -17,8 +17,6 @@ pub struct SetParticipantStatus<'info> {
     pub participant: Account<'info, Participant>,
 }
 
-/// Revoking a suspended maker's SPL allowance is client-side (F11): the maker
-/// tooling does it, the program only blocks the participant in settle_quote.
 pub fn handle_set_participant_status(
     ctx: Context<SetParticipantStatus>,
     status: Status,

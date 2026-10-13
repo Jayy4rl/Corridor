@@ -21,8 +21,6 @@ pub struct UpdateParticipant<'info> {
     pub participant: Account<'info, Participant>,
 }
 
-/// Role is not changeable; today's day_volume_usdc is kept, so a lowered
-/// daily limit takes effect against volume already traded today.
 pub fn handle_update_participant(
     ctx: Context<UpdateParticipant>,
     kyb_ref_hash: Option<[u8; 32]>,

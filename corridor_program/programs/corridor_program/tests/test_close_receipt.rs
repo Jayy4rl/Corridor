@@ -9,7 +9,6 @@ use {
     solana_signer::Signer,
 };
 
-/// Settles one default quote and returns it with its receipt address.
 fn settled(m: &mut Market) -> (Quote, anchor_lang::prelude::Pubkey) {
     let q = m.quote(Direction::LocalToUsdc);
     m.settle(&q).unwrap();
@@ -52,7 +51,6 @@ fn taker_can_close_its_own_receipt() {
     assert!(m.env.svm.get_account(&receipt).is_none());
 }
 
-/// C22 is strict: at exactly expires_at + retention the receipt stays.
 #[test]
 fn receipt_cannot_close_before_retention_elapses() {
     let mut m = Market::new();
@@ -99,8 +97,6 @@ fn receipt_cannot_be_closed_twice() {
     assert!(m.send_as_taker(&[ix_close_receipt(&taker, &receipt, &taker)]).is_err());
 }
 
-/// The guarantee UC-12 rests on: once the receipt is gone, resubmitting the
-/// identical signed quote fails on expiry rather than settling again.
 #[test]
 fn replay_after_close_fails_quote_expired() {
     let mut m = Market::new();
@@ -115,8 +111,6 @@ fn replay_after_close_fails_quote_expired() {
     assert_eq!(m.balance(&m.payout.pubkey(), &m.usdc_mint.clone()), payout_before);
 }
 
-/// Retention is read from Config at close time, and zero is safe: the quote
-/// has still expired before its receipt can go.
 #[test]
 fn zero_retention_allows_close_right_after_expiry() {
     let mut m = Market::new();

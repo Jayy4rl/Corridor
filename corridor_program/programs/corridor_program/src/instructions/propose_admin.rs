@@ -18,8 +18,6 @@ pub struct ProposeAdmin<'info> {
     pub config: Account<'info, Config>,
 }
 
-/// Step 1 of the two-step admin transfer (F1, F6). Passing None cancels a
-/// pending proposal; a new proposal replaces the old one.
 pub fn handle_propose_admin(ctx: Context<ProposeAdmin>, new_admin: Option<Pubkey>) -> Result<()> {
     if let Some(new_admin) = &new_admin {
         require_not_default(new_admin)?;

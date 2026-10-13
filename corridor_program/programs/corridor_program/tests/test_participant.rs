@@ -298,8 +298,6 @@ fn taker_cannot_set_quote_signer() {
     assert_err(res, CorridorError::WrongRole);
 }
 
-/// Deviation from UC-10: rotation is allowed while suspended so a leaked key
-/// is dead before compliance reactivates the maker.
 #[test]
 fn suspended_maker_can_rotate_before_reactivation() {
     let mut env = Env::new();
@@ -338,8 +336,6 @@ fn nobody_else_can_rotate_a_makers_key() {
     assert_err(res, CorridorError::Unauthorized);
 }
 
-/// The quote key is a hot key that signs quotes only; it must not be able to
-/// replace itself or lock the maker out.
 #[test]
 fn quote_key_cannot_rotate_itself() {
     let mut env = Env::new();

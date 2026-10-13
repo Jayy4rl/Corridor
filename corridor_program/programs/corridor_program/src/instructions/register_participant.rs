@@ -31,8 +31,6 @@ pub struct RegisterParticipant<'info> {
     pub system_program: Program<'info, System>,
 }
 
-/// KYB happens off-chain; the compliance multisig attests to it by signing
-/// (F8). `quote_signer` applies to makers only and defaults to the wallet.
 pub fn handle_register_participant(
     ctx: Context<RegisterParticipant>,
     wallet: Pubkey,

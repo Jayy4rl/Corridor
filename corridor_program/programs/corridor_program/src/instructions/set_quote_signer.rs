@@ -11,11 +11,7 @@ use crate::{
 #[derive(Accounts)]
 pub struct SetQuoteSigner<'info> {
     pub maker: Signer<'info>,
-    /// Binding by stored wallet rather than by seeds gives the spec's
-    /// Unauthorized error; both are equally strict. Status is deliberately not
-    /// checked: a maker suspended over a leaked quote key must be able to
-    /// rotate it before reactivation, or the leaked key goes live again.
-    #[account(
+   #[account(
         mut,
         constraint = maker_participant.wallet == maker.key() @ CorridorError::Unauthorized,
         constraint = maker_participant.role == Role::Maker @ CorridorError::WrongRole
@@ -23,8 +19,6 @@ pub struct SetQuoteSigner<'info> {
     pub maker_participant: Account<'info, Participant>,
 }
 
-/// Rotating the key invalidates every outstanding quote signed by the old one,
-/// because settle_quote verifies against the current quote_signer.
 pub fn handle_set_quote_signer(ctx: Context<SetQuoteSigner>, new_quote_signer: Pubkey) -> Result<()> {
     let participant = &mut ctx.accounts.maker_participant;
     let old_quote_signer = participant.quote_signer;

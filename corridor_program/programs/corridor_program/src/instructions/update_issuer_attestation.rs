@@ -17,8 +17,6 @@ pub struct UpdateIssuerAttestation<'info> {
         constraint = config.compliance_authority == compliance.key() @ CorridorError::Unauthorized
     )]
     pub config: Account<'info, Config>,
-    /// Program ownership and the account discriminator already prove this is a
-    /// genuine IssuerEntry; no mint is passed here, so there is nothing to bind.
     #[account(mut)]
     pub issuer_entry: Account<'info, IssuerEntry>,
 }

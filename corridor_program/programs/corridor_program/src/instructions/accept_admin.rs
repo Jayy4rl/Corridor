@@ -10,8 +10,6 @@ pub struct AcceptAdmin<'info> {
     pub config: Account<'info, Config>,
 }
 
-/// Step 2 of the two-step admin transfer: only the proposed key can complete
-/// it, so a mistyped address can never take control (F6).
 pub fn handle_accept_admin(ctx: Context<AcceptAdmin>) -> Result<()> {
     let config = &mut ctx.accounts.config;
     let pending_admin = config.pending_admin.ok_or(CorridorError::NoPendingAdmin)?;

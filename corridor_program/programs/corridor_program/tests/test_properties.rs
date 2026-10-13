@@ -58,8 +58,6 @@ proptest! {
 
     // ---- Daily counters (C19) ----
 
-    /// Replays random trades over a few UTC days against a reference model.
-    /// A rejected trade reverts its transaction, so state is restored on Err.
     #[test]
     fn daily_counter_matches_reference_model(
         limit in 0u64..1_000_000,
@@ -120,8 +118,7 @@ proptest! {
         prop_assert_eq!(parsed, message.as_slice());
     }
 
-    /// F10a: any instruction index other than u16::MAX, in any of the three
-    /// index fields, is rejected.
+    
     #[test]
     fn ed25519_parser_rejects_foreign_instruction_index(field in 0usize..3, index in 0u16..u16::MAX) {
         let mut ix = ed25519_ix(&Keypair::new(), b"quote");
@@ -140,8 +137,6 @@ proptest! {
 
     // ---- Quote encoding (C15) ----
 
-    /// Fixed width means the encoding is injective: two quotes that differ in
-    /// any field never share signed bytes.
     #[test]
     fn quote_message_is_fixed_width_and_injective(
         a in any::<(u64, u64, u64, i64, [u8; 32])>(),
