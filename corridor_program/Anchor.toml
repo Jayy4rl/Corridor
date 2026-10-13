@@ -6,6 +6,9 @@ skip_local_validator = true
 resolution = true
 skip-lint = false
 
+[programs.devnet]
+corridor_program = "3RecGnphiwdGbpiKgvWi6JhSdtrVwtUHQcbTqBvbhiiM"
+
 [programs.localnet]
 corridor_program = "3RecGnphiwdGbpiKgvWi6JhSdtrVwtUHQcbTqBvbhiiM"
 
