@@ -52,6 +52,36 @@ Program accounts:
 - Routing trades across other venues (for example Jupiter or Circle StableFX)
 - Automatic compliance reporting to the South African Reserve Bank (FinSurv)
 
+## Deployment (devnet)
+
+| | Address |
+| --- | --- |
+| Program ID | [`3RecGnphiwdGbpiKgvWi6JhSdtrVwtUHQcbTqBvbhiiM`](https://explorer.solana.com/address/3RecGnphiwdGbpiKgvWi6JhSdtrVwtUHQcbTqBvbhiiM?cluster=devnet) |
+| Config account | [`xW3H2VVFwuExc4Yy4ndEQzWsQ9pLWQy44NkFmsaqsGY`](https://explorer.solana.com/address/xW3H2VVFwuExc4Yy4ndEQzWsQ9pLWQy44NkFmsaqsGY?cluster=devnet) |
+| Test USDC mint | [`HS3ySAjMDmyKe41FUEFCERoiwbQ4mGr57fe1uVd47Hyj`](https://explorer.solana.com/address/HS3ySAjMDmyKe41FUEFCERoiwbQ4mGr57fe1uVd47Hyj?cluster=devnet) |
+| Admin (Squads 2-of-3 vault) | `9QaCtGMLo21DwejpSuWg77RAxtXh8k4wxzZ25XRgiGqr` |
+| Compliance (Squads 2-of-3 vault) | `Bc8CSqxuhgGQNzrd4Mx8MTZ1b7xpTiichHUp84sKD7Pg` |
+| Guardian | `EppTTFFkKBzNVZD5twvN3YjojpSruKQC9CFkFUMqBACE` |
+
+All addresses are on Solana **devnet**; the USDC mint is a test token, not Circle's.
+
+## Architecture
+
+![Corridor architecture](docs/images/Architecture.png)
+
+## Tests
+
+Run the full suite (134 tests) or the narrated demo from `corridor_program/`:
+
+```bash
+anchor build --arch v0 --ignore-keys && cargo test
+cargo test --test demo -- --nocapture
+```
+
+![Settlement tests passing (50 tests)](docs/images/test1.png)
+
+![Issuer and participant tests passing (17 and 23 tests)](docs/images/test2.png)
+
 ## Built with
 
 Solana · Anchor · SPL Token
