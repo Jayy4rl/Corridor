@@ -65,6 +65,8 @@ pub struct SettleQuote<'info> {
     #[account(mut)]
     pub treasury_ata_out: Box<InterfaceAccount<'info, TokenAccount>>,
 
+    /// CHECK: signer-only PDA that holds no data. Per-maker seeds (F9) mean a
+    /// maker's SPL approval can only be spent on that maker's own quotes.
     #[account(seeds = [DELEGATE_SEED, maker_participant.wallet.as_ref()], bump)]
     pub delegate_authority: UncheckedAccount<'info>,
 
@@ -78,6 +80,7 @@ pub struct SettleQuote<'info> {
     )]
     pub quote_receipt: Box<Account<'info, QuoteReceipt>>,
 
+    /// CHECK: address-checked; read through the sysvar helpers.
     #[account(address = solana_instructions_sysvar::ID)]
     pub instructions_sysvar: UncheckedAccount<'info>,
     #[account(address = usdc_issuer.token_program @ CorridorError::MintMismatch)]
