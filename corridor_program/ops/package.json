@@ -1,0 +1,16 @@
+{
+  "name": "corridor-ops",
+  "private": true,
+  "type": "module",
+  "description": "Devnet operations for the Corridor settlement program: Squads multisigs, test mint, initialisation.",
+  "dependencies": {
+    "@solana/web3.js": "1.98.0",
+    "@sqds/multisig": "2.1.4",
+    "@solana/spl-token": "0.3.11",
+    "bs58": "4.0.1"
+  },
+  "scripts": {
+    "setup:market": "node 04-setup-devnet-market.mjs",
+    "test": "node --test --test-concurrency=1 --test-reporter=spec 'test/*.test.mjs'"
+  }
+}

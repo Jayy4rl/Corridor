@@ -1,0 +1,41 @@
+{
+  "squads": {
+    "admin": {
+      "multisig": "7GLVF1bxEBgQRedGJ9bf3GPXvDuKaDbnbfEtvkBibwfN",
+      "vault": "9QaCtGMLo21DwejpSuWg77RAxtXh8k4wxzZ25XRgiGqr",
+      "threshold": "2-of-3",
+      "members": [
+        "2ZPNp9vZp58SdFsdLUEtGtV45eyhAqEx6ZKGenjm9k57",
+        "6dsW9FpXus7K76ndFyVGDDyzE7SXESrARgZ4Qib37uMc",
+        "4bHfWdZknCaRboGk9WMw5fuvB8szMrHPVjUaBYypw12y"
+      ]
+    },
+    "compliance": {
+      "multisig": "8afZBwi5kxhps7sn58GW5xXnUCRNCnRY9MQpWkqq2ooo",
+      "vault": "Bc8CSqxuhgGQNzrd4Mx8MTZ1b7xpTiichHUp84sKD7Pg",
+      "threshold": "2-of-3",
+      "members": [
+        "8Gi7WGFGYEAJ6v3QDq3qHAhCNvr4Xffsp2ro2b6J4JAM",
+        "J1tL7fdZyctNn19G2Lm96zf6QgtcA5LC2aK3uZ953UYd",
+        "HrCja2BLKh6heekUMBNDraanf4FJ3o98np42pW88Ww4Y"
+      ]
+    }
+  },
+  "usdcMint": "HS3ySAjMDmyKe41FUEFCERoiwbQ4mGr57fe1uVd47Hyj",
+  "usdcDecimals": 6,
+  "genesisHash": "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG",
+  "initializeConfigTx": "3mgtCzsHkdNUvdKDcgfHrgPMdXpPgduFvdChUudMLPwkvBfuEDQCnToXhmn7WJSg4oiwoaYrYAdeGoP8VGTyMSNd",
+  "config": "xW3H2VVFwuExc4Yy4ndEQzWsQ9pLWQy44NkFmsaqsGY",
+  "guardian": "EppTTFFkKBzNVZD5twvN3YjojpSruKQC9CFkFUMqBACE",
+  "treasuryOwner": "9cuMEMyu3qSz7h11MPn5v2WcgMndE5neukmQyRonboZw",
+  "feeBps": 10,
+  "receiptRetentionSecs": 3600,
+  "market": {
+    "zarscMint": "FKHqmHChZbVtPMHk6EVNwGvzB7r5orrJGsrF5e7cNP9L",
+    "lookupTable": "Aj92tyL9WMmFGc89DGVf7Sn8fQGa8X58LHDfEKzN8b4B",
+    "taker": "FjiyNRQngZyt1B7awzT8twmJ2ocTWFaSfugAcDZU5u4p",
+    "maker": "EjhSD1QfsYo4mRzeYrZj2bNVyMoVAWyETVaz6QW3kAeB",
+    "makerQuoteKey": "6cQSbQThmQ2FBVKKwof62qa7M69gmcxYV3iepRFNc6PM",
+    "payout": "DeNVvZXBZxzFg5pGYy9UqZFqE3CkQSobYQL2LR31rPb7"
+  }
+}
