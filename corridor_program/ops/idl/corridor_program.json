@@ -1,0 +1,2510 @@
+{
+  "address": "3RecGnphiwdGbpiKgvWi6JhSdtrVwtUHQcbTqBvbhiiM",
+  "metadata": {
+    "name": "corridor_program",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "accept_admin",
+      "discriminator": [
+        112,
+        42,
+        45,
+        90,
+        116,
+        181,
+        13,
+        170
+      ],
+      "accounts": [
+        {
+          "name": "new_admin",
+          "signer": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "event_authority"
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "close_receipt",
+      "discriminator": [
+        126,
+        254,
+        244,
+        203,
+        124,
+        164,
+        134,
+        89
+      ],
+      "accounts": [
+        {
+          "name": "caller",
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "quote_receipt",
+          "writable": true
+        },
+        {
+          "name": "rent_payer",
+          "writable": true,
+          "relations": [
+            "quote_receipt"
+          ]
+        },
+        {
+          "name": "event_authority"
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_config",
+      "discriminator": [
+        208,
+        127,
+        21,
+        1,
+        194,
+        190,
+        196,
+        70
+      ],
+      "accounts": [
+        {
+          "name": "deployer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program_data",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  36,
+                  7,
+                  214,
+                  65,
+                  50,
+                  216,
+                  48,
+                  99,
+                  140,
+                  238,
+                  7,
+                  81,
+                  0,
+                  7,
+                  52,
+                  122,
+                  109,
+                  147,
+                  226,
+                  216,
+                  92,
+                  164,
+                  24,
+                  52,
+                  158,
+                  210,
+                  175,
+                  34,
+                  199,
+                  180,
+                  249,
+                  34
+                ]
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                2,
+                168,
+                246,
+                145,
+                78,
+                136,
+                161,
+                176,
+                226,
+                16,
+                21,
+                62,
+                247,
+                99,
+                174,
+                43,
+                0,
+                194,
+                185,
+                61,
+                22,
+                193,
+                36,
+                210,
+                192,
+                83,
+                122,
+                16,
+                4,
+                128,
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "event_authority"
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "InitializeConfigArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "propose_admin",
+      "discriminator": [
+        121,
+        214,
+        199,
+        212,
+        87,
+        39,
+        117,
+        234
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "event_authority"
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "new_admin",
+          "type": {
+            "option": "pubkey"
+          }
+        }
+      ]
+    },
+    {
+      "name": "register_issuer",
+      "discriminator": [
+        145,
+        117,
+        52,
+        59,
+        189,
+        27,
+        127,
+        18
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "issuer_entry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  115,
+                  115,
+                  117,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "event_authority"
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "attestation_hash",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "attestation_expires_at",
+          "type": "i64"
+        },
+        {
+          "name": "max_trade_amount",
+          "type": "u64"
+        },
+        {
+          "name": "daily_cap",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "register_participant",
+      "discriminator": [
+        248,
+        112,
+        38,
+        215,
+        226,
+        230,
+        249,
+        40
+      ],
+      "accounts": [
+        {
+          "name": "compliance",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "participant",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  97,
+                  114,
+                  116,
+                  105,
+                  99,
+                  105,
+                  112,
+                  97,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "wallet"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "event_authority"
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "wallet",
+          "type": "pubkey"
+        },
+        {
+          "name": "role",
+          "type": {
+            "defined": {
+              "name": "Role"
+            }
+          }
+        },
+        {
+          "name": "kyb_ref_hash",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "max_trade_usdc",
+          "type": "u64"
+        },
+        {
+          "name": "daily_limit_usdc",
+          "type": "u64"
+        },
+        {
+          "name": "quote_signer",
+          "type": {
+            "option": "pubkey"
+          }
+        }
+      ]
+    },
+    {
+      "name": "set_issuer_status",
+      "discriminator": [
+        31,
+        160,
+        75,
+        115,
+        119,
+        98,
+        91,
+        15
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "issuer_entry",
+          "writable": true
+        },
+        {
+          "name": "event_authority"
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "status",
+          "type": {
+            "defined": {
+              "name": "Status"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "set_operational_authorities",
+      "discriminator": [
+        231,
+        194,
+        235,
+        159,
+        107,
+        87,
+        152,
+        9
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "event_authority"
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "compliance_authority",
+          "type": {
+            "option": "pubkey"
+          }
+        },
+        {
+          "name": "guardian",
+          "type": {
+            "option": "pubkey"
+          }
+        }
+      ]
+    },
+    {
+      "name": "set_participant_status",
+      "discriminator": [
+        168,
+        39,
+        35,
+        130,
+        197,
+        201,
+        100,
+        165
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "participant",
+          "writable": true
+        },
+        {
+          "name": "event_authority"
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "status",
+          "type": {
+            "defined": {
+              "name": "Status"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "set_paused",
+      "discriminator": [
+        91,
+        60,
+        125,
+        192,
+        176,
+        225,
+        166,
+        218
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "event_authority"
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "paused",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "set_quote_signer",
+      "discriminator": [
+        46,
+        83,
+        192,
+        40,
+        181,
+        242,
+        52,
+        106
+      ],
+      "accounts": [
+        {
+          "name": "maker",
+          "signer": true
+        },
+        {
+          "name": "maker_participant",
+          "writable": true
+        },
+        {
+          "name": "event_authority"
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "new_quote_signer",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "settle_quote",
+      "discriminator": [
+        99,
+        181,
+        137,
+        249,
+        106,
+        87,
+        109,
+        216
+      ],
+      "accounts": [
+        {
+          "name": "taker",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "taker_participant",
+          "writable": true
+        },
+        {
+          "name": "maker_participant",
+          "writable": true
+        },
+        {
+          "name": "recipient_participant"
+        },
+        {
+          "name": "usdc_mint"
+        },
+        {
+          "name": "local_mint"
+        },
+        {
+          "name": "usdc_issuer",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  115,
+                  115,
+                  117,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "usdc_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "local_issuer",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  115,
+                  115,
+                  117,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "local_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "taker_ata_in",
+          "writable": true
+        },
+        {
+          "name": "maker_ata_in",
+          "writable": true
+        },
+        {
+          "name": "maker_ata_out",
+          "writable": true
+        },
+        {
+          "name": "recipient_ata_out",
+          "writable": true
+        },
+        {
+          "name": "treasury_ata_out",
+          "writable": true
+        },
+        {
+          "name": "delegate_authority",
+          "docs": [
+            "maker's SPL approval can only be spent on that maker's own quotes."
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  100,
+                  101,
+                  108,
+                  101,
+                  103,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maker_participant.wallet",
+                "account": "Participant"
+              }
+            ]
+          }
+        },
+        {
+          "name": "quote_receipt",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  99,
+                  101,
+                  105,
+                  112,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maker_participant.wallet",
+                "account": "Participant"
+              },
+              {
+                "kind": "arg",
+                "path": "quote_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "instructions_sysvar",
+          "address": "Sysvar1nstructions1111111111111111111111111"
+        },
+        {
+          "name": "usdc_token_program"
+        },
+        {
+          "name": "local_token_program"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "event_authority"
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "quote_id",
+          "type": "u64"
+        },
+        {
+          "name": "direction",
+          "type": {
+            "defined": {
+              "name": "Direction"
+            }
+          }
+        },
+        {
+          "name": "amount_in",
+          "type": "u64"
+        },
+        {
+          "name": "amount_out",
+          "type": "u64"
+        },
+        {
+          "name": "expires_at",
+          "type": "i64"
+        },
+        {
+          "name": "min_amount_out",
+          "type": "u64"
+        },
+        {
+          "name": "compliance_hash",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "update_issuer_attestation",
+      "discriminator": [
+        15,
+        212,
+        164,
+        100,
+        20,
+        161,
+        71,
+        17
+      ],
+      "accounts": [
+        {
+          "name": "compliance",
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "issuer_entry",
+          "writable": true
+        },
+        {
+          "name": "event_authority"
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "attestation_hash",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "attestation_expires_at",
+          "type": "i64"
+        }
+      ]
+    },
+    {
+      "name": "update_issuer_caps",
+      "discriminator": [
+        57,
+        60,
+        201,
+        156,
+        125,
+        93,
+        203,
+        165
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "issuer_entry",
+          "writable": true
+        },
+        {
+          "name": "event_authority"
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "max_trade_amount",
+          "type": {
+            "option": "u64"
+          }
+        },
+        {
+          "name": "daily_cap",
+          "type": {
+            "option": "u64"
+          }
+        }
+      ]
+    },
+    {
+      "name": "update_params",
+      "discriminator": [
+        108,
+        178,
+        190,
+        95,
+        94,
+        203,
+        116,
+        20
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "event_authority"
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "fee_bps",
+          "type": {
+            "option": "u16"
+          }
+        },
+        {
+          "name": "treasury_owner",
+          "type": {
+            "option": "pubkey"
+          }
+        },
+        {
+          "name": "receipt_retention_secs",
+          "type": {
+            "option": "u64"
+          }
+        }
+      ]
+    },
+    {
+      "name": "update_participant",
+      "discriminator": [
+        21,
+        180,
+        156,
+        111,
+        222,
+        176,
+        127,
+        243
+      ],
+      "accounts": [
+        {
+          "name": "compliance",
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "participant",
+          "writable": true
+        },
+        {
+          "name": "event_authority"
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "kyb_ref_hash",
+          "type": {
+            "option": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          }
+        },
+        {
+          "name": "max_trade_usdc",
+          "type": {
+            "option": "u64"
+          }
+        },
+        {
+          "name": "daily_limit_usdc",
+          "type": {
+            "option": "u64"
+          }
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Config",
+      "discriminator": [
+        155,
+        12,
+        170,
+        224,
+        30,
+        250,
+        204,
+        130
+      ]
+    },
+    {
+      "name": "IssuerEntry",
+      "discriminator": [
+        11,
+        211,
+        245,
+        253,
+        249,
+        156,
+        104,
+        93
+      ]
+    },
+    {
+      "name": "Participant",
+      "discriminator": [
+        32,
+        142,
+        108,
+        79,
+        247,
+        179,
+        54,
+        6
+      ]
+    },
+    {
+      "name": "QuoteReceipt",
+      "discriminator": [
+        131,
+        93,
+        25,
+        39,
+        142,
+        247,
+        217,
+        68
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "AdminAccepted",
+      "discriminator": [
+        174,
+        12,
+        76,
+        139,
+        158,
+        99,
+        110,
+        254
+      ]
+    },
+    {
+      "name": "AdminProposed",
+      "discriminator": [
+        129,
+        249,
+        226,
+        227,
+        199,
+        82,
+        110,
+        243
+      ]
+    },
+    {
+      "name": "AttestationUpdated",
+      "discriminator": [
+        144,
+        39,
+        96,
+        142,
+        34,
+        173,
+        37,
+        75
+      ]
+    },
+    {
+      "name": "ConfigInitialized",
+      "discriminator": [
+        181,
+        49,
+        200,
+        156,
+        19,
+        167,
+        178,
+        91
+      ]
+    },
+    {
+      "name": "IssuerCapsUpdated",
+      "discriminator": [
+        80,
+        13,
+        39,
+        222,
+        11,
+        148,
+        45,
+        143
+      ]
+    },
+    {
+      "name": "IssuerRegistered",
+      "discriminator": [
+        98,
+        108,
+        156,
+        224,
+        9,
+        0,
+        195,
+        21
+      ]
+    },
+    {
+      "name": "IssuerStatusChanged",
+      "discriminator": [
+        130,
+        171,
+        24,
+        46,
+        255,
+        61,
+        237,
+        157
+      ]
+    },
+    {
+      "name": "OperationalAuthoritiesUpdated",
+      "discriminator": [
+        216,
+        114,
+        200,
+        63,
+        6,
+        183,
+        109,
+        61
+      ]
+    },
+    {
+      "name": "ParamsUpdated",
+      "discriminator": [
+        2,
+        163,
+        138,
+        99,
+        135,
+        11,
+        136,
+        169
+      ]
+    },
+    {
+      "name": "ParticipantRegistered",
+      "discriminator": [
+        47,
+        115,
+        159,
+        109,
+        135,
+        121,
+        70,
+        193
+      ]
+    },
+    {
+      "name": "ParticipantStatusChanged",
+      "discriminator": [
+        187,
+        210,
+        188,
+        237,
+        23,
+        200,
+        159,
+        228
+      ]
+    },
+    {
+      "name": "ParticipantUpdated",
+      "discriminator": [
+        52,
+        49,
+        89,
+        74,
+        143,
+        115,
+        139,
+        49
+      ]
+    },
+    {
+      "name": "PauseChanged",
+      "discriminator": [
+        238,
+        188,
+        213,
+        78,
+        134,
+        209,
+        178,
+        218
+      ]
+    },
+    {
+      "name": "QuoteSettled",
+      "discriminator": [
+        59,
+        144,
+        13,
+        86,
+        160,
+        45,
+        245,
+        129
+      ]
+    },
+    {
+      "name": "QuoteSignerRotated",
+      "discriminator": [
+        82,
+        114,
+        108,
+        192,
+        233,
+        187,
+        22,
+        112
+      ]
+    },
+    {
+      "name": "ReceiptClosed",
+      "discriminator": [
+        127,
+        232,
+        161,
+        69,
+        46,
+        187,
+        159,
+        188
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "Unauthorized",
+      "msg": "Signer is not authorised for this instruction"
+    },
+    {
+      "code": 6001,
+      "name": "GuardianCannotResume",
+      "msg": "Guardian may only pause or suspend, never resume"
+    },
+    {
+      "code": 6002,
+      "name": "FeeTooHigh",
+      "msg": "Fee exceeds MAX_FEE_BPS"
+    },
+    {
+      "code": 6003,
+      "name": "Paused",
+      "msg": "Protocol is paused"
+    },
+    {
+      "code": 6004,
+      "name": "UnsupportedMintExtension",
+      "msg": "Mint uses a Token-2022 extension that v1 does not support"
+    },
+    {
+      "code": 6005,
+      "name": "AttestationExpired",
+      "msg": "Issuer attestation has expired"
+    },
+    {
+      "code": 6006,
+      "name": "IssuerSuspended",
+      "msg": "Issuer is suspended"
+    },
+    {
+      "code": 6007,
+      "name": "ParticipantSuspended",
+      "msg": "Participant is suspended"
+    },
+    {
+      "code": 6008,
+      "name": "WrongRole",
+      "msg": "Participant has the wrong role for this action"
+    },
+    {
+      "code": 6009,
+      "name": "RecipientNotAllowed",
+      "msg": "Recipient must be the taker or an active payout partner"
+    },
+    {
+      "code": 6010,
+      "name": "PairMustIncludeUsdc",
+      "msg": "Exactly one leg must be USDC"
+    },
+    {
+      "code": 6011,
+      "name": "AccountOwnerMismatch",
+      "msg": "Token account owner does not match"
+    },
+    {
+      "code": 6012,
+      "name": "MintMismatch",
+      "msg": "Token account or issuer mint does not match"
+    },
+    {
+      "code": 6013,
+      "name": "InsufficientAllowance",
+      "msg": "Maker delegate allowance is missing or too small"
+    },
+    {
+      "code": 6014,
+      "name": "MissingEd25519Instruction",
+      "msg": "Previous instruction is not an Ed25519 verification"
+    },
+    {
+      "code": 6015,
+      "name": "InvalidEd25519Offsets",
+      "msg": "Ed25519 instruction offsets are not self-referencing"
+    },
+    {
+      "code": 6016,
+      "name": "InvalidQuoteSignature",
+      "msg": "Quote signature does not match the maker's quote signer or quote terms"
+    },
+    {
+      "code": 6017,
+      "name": "QuoteExpired",
+      "msg": "Quote has expired"
+    },
+    {
+      "code": 6018,
+      "name": "QuoteTtlTooLong",
+      "msg": "Quote expiry exceeds MAX_QUOTE_TTL"
+    },
+    {
+      "code": 6019,
+      "name": "SlippageExceeded",
+      "msg": "Amount out after fee is below min_amount_out"
+    },
+    {
+      "code": 6020,
+      "name": "TradeTooLarge",
+      "msg": "Trade exceeds a per-trade limit"
+    },
+    {
+      "code": 6021,
+      "name": "DailyLimitExceeded",
+      "msg": "Trade exceeds a daily limit"
+    },
+    {
+      "code": 6022,
+      "name": "MathOverflow",
+      "msg": "Arithmetic overflow"
+    },
+    {
+      "code": 6023,
+      "name": "RetentionNotElapsed",
+      "msg": "Receipt retention period has not elapsed"
+    },
+    {
+      "code": 6024,
+      "name": "RentPayerMismatch",
+      "msg": "Rent payer does not match the receipt"
+    },
+    {
+      "code": 6025,
+      "name": "NoPendingAdmin",
+      "msg": "No pending admin to accept"
+    },
+    {
+      "code": 6026,
+      "name": "SameSigner",
+      "msg": "New quote signer equals the current one"
+    },
+    {
+      "code": 6027,
+      "name": "InvalidLimits",
+      "msg": "Limits are invalid for this role"
+    },
+    {
+      "code": 6028,
+      "name": "DefaultPubkey",
+      "msg": "Key must not be the default (all-zero) pubkey"
+    },
+    {
+      "code": 6029,
+      "name": "ZeroAmount",
+      "msg": "Trade amounts must be non-zero"
+    }
+  ],
+  "types": [
+    {
+      "name": "AdminAccepted",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "old_admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_admin",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AdminProposed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "pending_admin",
+            "type": {
+              "option": "pubkey"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "AttestationUpdated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "old_attestation_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "new_attestation_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "old_expires_at",
+            "type": "i64"
+          },
+          {
+            "name": "new_expires_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Config",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "compliance_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "guardian",
+            "type": "pubkey"
+          },
+          {
+            "name": "usdc_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "fee_bps",
+            "type": "u16"
+          },
+          {
+            "name": "treasury_owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "receipt_retention_secs",
+            "type": "u64"
+          },
+          {
+            "name": "paused",
+            "type": "bool"
+          },
+          {
+            "name": "pending_admin",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "genesis_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ConfigInitialized",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "compliance_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "guardian",
+            "type": "pubkey"
+          },
+          {
+            "name": "usdc_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "fee_bps",
+            "type": "u16"
+          },
+          {
+            "name": "treasury_owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "receipt_retention_secs",
+            "type": "u64"
+          },
+          {
+            "name": "genesis_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Direction",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "LocalToUsdc"
+          },
+          {
+            "name": "UsdcToLocal"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InitializeConfigArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "compliance_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "guardian",
+            "type": "pubkey"
+          },
+          {
+            "name": "usdc_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "fee_bps",
+            "type": "u16"
+          },
+          {
+            "name": "treasury_owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "receipt_retention_secs",
+            "type": "u64"
+          },
+          {
+            "name": "genesis_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "IssuerCapsUpdated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "old_max_trade_amount",
+            "type": "u64"
+          },
+          {
+            "name": "new_max_trade_amount",
+            "type": "u64"
+          },
+          {
+            "name": "old_daily_cap",
+            "type": "u64"
+          },
+          {
+            "name": "new_daily_cap",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "IssuerEntry",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "token_program",
+            "type": "pubkey"
+          },
+          {
+            "name": "decimals",
+            "type": "u8"
+          },
+          {
+            "name": "attestation_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "attestation_expires_at",
+            "type": "i64"
+          },
+          {
+            "name": "max_trade_amount",
+            "type": "u64"
+          },
+          {
+            "name": "daily_cap",
+            "type": "u64"
+          },
+          {
+            "name": "day_index",
+            "type": "i64"
+          },
+          {
+            "name": "day_volume",
+            "type": "u64"
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "Status"
+              }
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "IssuerRegistered",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "token_program",
+            "type": "pubkey"
+          },
+          {
+            "name": "decimals",
+            "type": "u8"
+          },
+          {
+            "name": "attestation_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "attestation_expires_at",
+            "type": "i64"
+          },
+          {
+            "name": "max_trade_amount",
+            "type": "u64"
+          },
+          {
+            "name": "daily_cap",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "IssuerStatusChanged",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "Status"
+              }
+            }
+          },
+          {
+            "name": "by",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "OperationalAuthoritiesUpdated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "old_compliance_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_compliance_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "old_guardian",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_guardian",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ParamsUpdated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "old_fee_bps",
+            "type": "u16"
+          },
+          {
+            "name": "new_fee_bps",
+            "type": "u16"
+          },
+          {
+            "name": "old_treasury_owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_treasury_owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "old_receipt_retention_secs",
+            "type": "u64"
+          },
+          {
+            "name": "new_receipt_retention_secs",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Participant",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "wallet",
+            "type": "pubkey"
+          },
+          {
+            "name": "role",
+            "type": {
+              "defined": {
+                "name": "Role"
+              }
+            }
+          },
+          {
+            "name": "kyb_ref_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "quote_signer",
+            "type": "pubkey"
+          },
+          {
+            "name": "max_trade_usdc",
+            "type": "u64"
+          },
+          {
+            "name": "daily_limit_usdc",
+            "type": "u64"
+          },
+          {
+            "name": "day_index",
+            "type": "i64"
+          },
+          {
+            "name": "day_volume_usdc",
+            "type": "u64"
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "Status"
+              }
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ParticipantRegistered",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "wallet",
+            "type": "pubkey"
+          },
+          {
+            "name": "role",
+            "type": {
+              "defined": {
+                "name": "Role"
+              }
+            }
+          },
+          {
+            "name": "kyb_ref_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "ParticipantStatusChanged",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "wallet",
+            "type": "pubkey"
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "Status"
+              }
+            }
+          },
+          {
+            "name": "by",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ParticipantUpdated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "wallet",
+            "type": "pubkey"
+          },
+          {
+            "name": "kyb_ref_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "old_max_trade_usdc",
+            "type": "u64"
+          },
+          {
+            "name": "new_max_trade_usdc",
+            "type": "u64"
+          },
+          {
+            "name": "old_daily_limit_usdc",
+            "type": "u64"
+          },
+          {
+            "name": "new_daily_limit_usdc",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PauseChanged",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "paused",
+            "type": "bool"
+          },
+          {
+            "name": "by",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "QuoteReceipt",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "expires_at",
+            "type": "i64"
+          },
+          {
+            "name": "rent_payer",
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "QuoteSettled",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "quote_id",
+            "type": "u64"
+          },
+          {
+            "name": "maker",
+            "type": "pubkey"
+          },
+          {
+            "name": "taker",
+            "type": "pubkey"
+          },
+          {
+            "name": "recipient",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint_in",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint_out",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount_in",
+            "type": "u64"
+          },
+          {
+            "name": "amount_out",
+            "type": "u64"
+          },
+          {
+            "name": "fee",
+            "type": "u64"
+          },
+          {
+            "name": "compliance_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "settled_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "QuoteSignerRotated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "maker",
+            "type": "pubkey"
+          },
+          {
+            "name": "old_quote_signer",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_quote_signer",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ReceiptClosed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "receipt",
+            "type": "pubkey"
+          },
+          {
+            "name": "rent_payer",
+            "type": "pubkey"
+          },
+          {
+            "name": "closed_by",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Role",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Taker"
+          },
+          {
+            "name": "Maker"
+          },
+          {
+            "name": "PayoutPartner"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Status",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Active"
+          },
+          {
+            "name": "Suspended"
+          }
+        ]
+      }
+    }
+  ],
+  "constants": [
+    {
+      "name": "BPS_DENOMINATOR",
+      "type": "u64",
+      "value": "10000"
+    },
+    {
+      "name": "CONFIG_SEED",
+      "type": "bytes",
+      "value": "[99, 111, 110, 102, 105, 103]"
+    },
+    {
+      "name": "DELEGATE_SEED",
+      "type": "bytes",
+      "value": "[100, 101, 108, 101, 103, 97, 116, 101]"
+    },
+    {
+      "name": "DOMAIN_TAG",
+      "type": "bytes",
+      "value": "[67, 79, 82, 82, 73, 68, 79, 82, 95, 81, 85, 79, 84, 69, 95, 86, 49]"
+    },
+    {
+      "name": "ISSUER_SEED",
+      "type": "bytes",
+      "value": "[105, 115, 115, 117, 101, 114]"
+    },
+    {
+      "name": "MAX_FEE_BPS",
+      "type": "u16",
+      "value": "50"
+    },
+    {
+      "name": "MAX_QUOTE_TTL",
+      "type": "i64",
+      "value": "120"
+    },
+    {
+      "name": "PARTICIPANT_SEED",
+      "type": "bytes",
+      "value": "[112, 97, 114, 116, 105, 99, 105, 112, 97, 110, 116]"
+    },
+    {
+      "name": "RECEIPT_SEED",
+      "type": "bytes",
+      "value": "[114, 101, 99, 101, 105, 112, 116]"
+    },
+    {
+      "name": "SECONDS_PER_DAY",
+      "type": "i64",
+      "value": "86400"
+    }
+  ]
+}

@@ -78,9 +78,8 @@ anchor build --arch v0 --ignore-keys && cargo test
 cargo test --test demo -- --nocapture
 ```
 
-![Settlement tests passing (50 tests)](docs/images/test1.png)
+![Tests Passing on devnet](docs/images/tests.png)
 
-![Issuer and participant tests passing (17 and 23 tests)](docs/images/test2.png)
 
 ## Built with
 
