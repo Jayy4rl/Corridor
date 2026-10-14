@@ -93,6 +93,12 @@ pub struct Market {
 
 impl Market {
     pub fn new() -> Self {
+        Self::with_balances(STARTING_BALANCE, STARTING_BALANCE)
+    }
+
+    /// Like `new`, but the taker and maker each start with `usdc` and
+    /// `local` base units (the demo uses realistic amounts).
+    pub fn with_balances(usdc: u64, local: u64) -> Self {
         let mut env = Env::new();
         let usdc_mint = env.usdc_mint;
         let expires_at = now(&env.svm) + ATTESTATION_TTL;
@@ -140,7 +146,7 @@ impl Market {
         }
         for owner in [market.taker.pubkey(), market.maker.pubkey()] {
             for mint in [usdc_mint, local_mint] {
-                market.fund(&owner, &mint, STARTING_BALANCE);
+                market.fund(&owner, &mint, if mint == usdc_mint { usdc } else { local });
             }
         }
         let maker = market.maker.insecure_clone();

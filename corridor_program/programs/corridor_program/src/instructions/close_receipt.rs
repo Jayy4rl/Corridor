@@ -19,6 +19,7 @@ pub struct CloseReceipt<'info> {
         has_one = rent_payer @ CorridorError::RentPayerMismatch
     )]
     pub quote_receipt: Account<'info, QuoteReceipt>,
+    /// CHECK: only receives the rent refund; bound to the receipt by has_one.
     #[account(mut)]
     pub rent_payer: UncheckedAccount<'info>,
 }
